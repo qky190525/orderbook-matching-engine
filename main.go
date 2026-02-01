@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-	fmt.Println("=== FlashLiquid Orderbook ===")
 	me := engine.NewMatchingEngine()
 	defer me.Stop()
 
@@ -17,8 +16,6 @@ func main() {
 	idempotencyMgr := engine.NewDefaultInMemoryIdempotencyManager()
 
 	// 1. Add some Asks (Sells)
-	// Sell 1 BTC @ 50000
-	// Sell 0.5 BTC @ 50100
 	fmt.Println("\n--- Placing Ask Orders ---")
 	asks := []*orderbook.Order{
 		{ID: 1, Price: 50000 * 1e8, Size: 1 * 1e8, Side: orderbook.Sell, Timestamp: time.Now().UnixNano(), OrderHash: "hash_ask_1"},
@@ -50,7 +47,6 @@ func main() {
 	printDepth(me)
 
 	// 2. Place a Bid (Buy) that matches partially
-	// Buy 1.2 BTC @ 50200 (Should eat the 50000 and part of 50100)
 	fmt.Println("\n--- Placing Aggressive Bid Order ---")
 	bidOrder := &orderbook.Order{
 		ID:        4,
@@ -78,12 +74,6 @@ func main() {
 	printDepth(me)
 
 	// 3. Cancel remaining part of Order 2 (if any) - Actually Order 2 is partially filled?
-	// 1.2 Buy matches:
-	// - 1.0 @ 50000 (Order 1 Filled)
-	// - 0.2 @ 50100 (Order 2 Partially Filled, 0.3 remaining)
-
-	// Let's check logic:
-	// Order 2 original size 0.5. Matched 0.2. Remaining 0.3.
 
 	fmt.Println("\n--- Canceling Remaining Order 2 ---")
 	err := me.CancelOrder(2)
