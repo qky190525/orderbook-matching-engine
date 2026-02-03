@@ -50,3 +50,48 @@ Order 2 canceled successfully
      ASKS (Sells):
      BIDS (Buys):
 ```
+# Test
+
+Test results for `PlaceOrder` function:
+> func (me *MatchingEngine) PlaceOrder(order *orderbook.Order) ([]orderbook.MatchEvent, error) {...}
+
+## Benchmark Test
+```
+goos: darwin
+goarch: arm64
+pkg: orderbook-matching-engine/benchmark
+cpu: Apple M2 Pro
+BenchmarkPlaceOrder-10           2294938               567.5 ns/op
+PASS
+ok      orderbook-matching-engine/benchmark     2.666s
+```
+
+## 1 million random orders (mix of Bids and Asks)
+```
+Total Execution Time: 570.017875ms
+Throughput (TPS): 1754330.95 orders/sec
+
+=== Overall Latency Stats ===
+Avg:  523ns
+P50:  417ns
+P90:  666ns
+P99:  2.125µs
+P99.9: 6.291µs
+Max:  7.021ms
+
+=== Matching Latency Stats (Count: 393101) ===
+Avg:  440ns
+P50:  333ns
+P90:  500ns
+P99:  1.959µs
+P99.9: 6.167µs
+Max:  7.021ms
+
+=== Non-Matching Latency Stats (Count: 606899) ===
+Avg:  577ns
+P50:  459ns
+P90:  667ns
+P99:  2.208µs
+P99.9: 6.334µs
+Max:  4.364542ms
+```
